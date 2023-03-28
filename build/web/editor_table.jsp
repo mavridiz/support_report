@@ -1,11 +1,5 @@
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.Connection"%>
 <%@page import="java.util.Properties"%>
-
-
+<%@page import="java.sql.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html class="h-full bg-gray-100">
@@ -81,6 +75,7 @@
                                 </div>
                             </div>
                             <%
+                                Class.forName("com.mysql.cj.jdbc.Driver");
                                 Connection dbConnection = null;
                                 try {
                                     String url = "jdbc:mysql://localhost:3306/elet";
@@ -88,17 +83,18 @@
                                     info.put("user", "root");
                                     info.put("password", "n0m3l0");
                                     dbConnection = DriverManager.getConnection(url, info);
-
                                     Statement statement = null;
                                     ResultSet rs = null;
 
                                     statement = dbConnection.createStatement();
-                                    String SQLQuery = "";
+                                    String SQLQuery = "SELECT usr_id,case_id,user_name,case_name,case_status,last_update_date FROM tbl_case_usr "
+                                            + " INNER JOIN tbl_users ON tbl_case_usr.usr_id = tbl_users.id"
+                                            + " INNER JOIN tbl_cases ON tbl_case_usr.case_id = tbl_cases.id WHERE case_status='Cerrado';";
                                     rs = statement.executeQuery(SQLQuery);
 
-                                    if (rs == null) {
+                                    if (!rs.isBeforeFirst()) {
                             %>
-                            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900">No existen registros</h1>
+                            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 p-5">No existen registros</h1>
                             <%
                             } else {
                             %>
@@ -116,33 +112,31 @@
                                                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Fecha de finalización</th>
 
                                                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                                            <span class="sr-only">Redactar</span>
+                                                            <a href="">
+                                                                <span class="sr-only">Redactar</span>
+                                                            </a>
                                                         </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="divide-y divide-gray-200 bg-white">
                                                     <%
                                                         while (rs.next()) {
-                                                            SQLQuery = "SELECT usr_id,case_id,user_name,case_name,case_status,last_update_date FROM tbl_case_usr "
-                                                                    + "INNER JOIN tbl_users ON tbl_case_usr.usr_id = tbl_users.id"
-                                                                    + "INNER JOIN tbl_cases ON tbl_case_usr.case_id = tbl_cases.id;";
 
-                                                            Integer id_user = rs.getInt("id_user");
-                                                            Integer id_case = rs.getInt("id_case");
+                                                            Integer id_user = rs.getInt("usr_id");
+                                                            Integer id_case = rs.getInt("case_id");
                                                             String username_report = rs.getString("user_name");
                                                             String report_name = rs.getString("case_name");
                                                             String status_report = rs.getString("case_status");
-                                                            
-
+                                                            String last_update_date = rs.getString("last_update_date");
                                                     %>
                                                     <tr>
                                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%=id_user%></td>
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%=username_report%></td>
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%=report_name%></td>
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%=status_report%></td>
-                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%=last_update_date%></td>
                                                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                            <a href="" class="text-indigo-600 hover:text-indigo-900">Redactar<span class="sr-only">, Lindsay Walton</span></a>
+                                                            <a href="editor_form.jsp?usr_id=<%=id_user%>&case_id=<%=id_case%>&report_name=<%=report_name%>&last_update_date=<%=last_update_date%>" class="text-indigo-600 hover:text-indigo-900">Redactar<span class="sr-only"></span></a>
                                                         </td>
                                                     </tr>                
                                                     <%
