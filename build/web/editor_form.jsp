@@ -56,7 +56,9 @@
                     Integer usr_id = Integer.valueOf(request.getParameter("usr_id"));
                     Integer case_id = Integer.valueOf(request.getParameter("case_id"));
                     String report_name = request.getParameter("report_name");
-                    String last_update_date = request.getParameter("last_update_date");                 
+                    String username_report = request.getParameter("username_report");
+                    String status_report = request.getParameter("status_report");
+                    String last_update_date = request.getParameter("last_update_date");
 
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection dbConnection = null;
@@ -71,21 +73,19 @@
                         ResultSet rs = null;
 
                         statement = dbConnection.createStatement();
-                        String SQLQuery = "SELECT ";
+                        String SQLQuery = "SELECT case_area,case_creation_date,case_desc from tbl_case_admin"
+                                + " INNER JOIN tbl_users ON tbl_case_admin.admin_id = tbl_users.id_user"
+                                + " INNER JOIN tbl_cases ON tbl_case_admin.case_id = tbl_cases.id_case "
+                                + " WHERE admin_id=1 AND case_id=1;";
                         rs = statement.executeQuery(SQLQuery);
-
                         while (rs.next()) {
-                            
-                            
-                            
-                        }
-                        statement.close();
-                        dbConnection.close();
+                            String case_area = rs.getString("case_area");
+                            String case_creation_date = rs.getString("case_creation_date");
+                            String case_desc = rs.getString("case_desc");
 
-                    } catch (SQLException e) {
-                        out.println("SQLException caught: " + e.getMessage());
-                    }
-                %>    
+
+                %>
+
 
                 <div class="mx-auto max-w-8xl py-6 sm:px-6 lg:px-8">
                     <!-- Replace with your content -->
@@ -111,55 +111,62 @@
                                                         <div class="overflow-hidden bg-white shadow sm:rounded-lg max-w-5xl">
                                                             <div class="px-4 py-5 sm:px-6">
                                                                 <h3 class="text-base font-semibold leading-6 text-gray-900">Reporte</h3>
-                                                                <p class="mt-1 max-w-2xl text-sm text-gray-500">Identificador del Reporte: </p>
+                                                                <p class="mt-1 max-w-2xl text-sm text-gray-500">Identificador del Reporte: <%=case_id%></p>
                                                             </div>
                                                             <div class="border-t border-gray-200">
                                                                 <dl>
                                                                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                                         <dt class="text-sm font-medium text-gray-500">Nombre del Caso</dt>
-                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">Margot Foster</dd>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=report_name%></dd>
                                                                     </div>
 
                                                                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                                         <dt class="text-sm font-medium text-gray-500">Identificador del usuario</dt>
-                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">Backend Developer</dd>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=usr_id%></dd>
+                                                                    </div>
+
+                                                                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                                        <dt class="text-sm font-medium text-gray-500">Nombre del usuario</dt>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=username_report%></dd>
                                                                     </div>
 
                                                                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                                         <dt class="text-sm font-medium text-gray-500">Departamento</dt>
-                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">margotfoster@example.com</dd>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=case_area%></dd>
                                                                     </div>
 
                                                                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                                         <dt class="text-sm font-medium text-gray-500">Fecha de creación</dt>
-                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">$120,000</dd>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=case_creation_date%></dd>
                                                                     </div>
 
                                                                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                                         <dt class="text-sm font-medium text-gray-500">Fecha de la última modificación</dt>
-                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">$120,000</dd>
-                                                                    </div>
-
-                                                                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                                        <dt class="text-sm font-medium text-gray-500">Fecha de la última modificación</dt>
-                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">$120,000</dd>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=last_update_date%></dd>
                                                                     </div>
 
                                                                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                                         <dt class="text-sm font-medium text-gray-500">Descripción</dt>
-                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.</dd>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=case_desc%></dd>
                                                                     </div>
                                                                 </dl>
                                                             </div>
                                                         </div>
+                                                        <%}
+                                                                statement.close();
+                                                                dbConnection.close();
+                                                            } catch (SQLException e) {
+                                                                out.println("SQLException caught: " + e.getMessage());
+                                                            }
 
+                                                        %>    
                                                     </td>
                                                     <td>
                                                         <div class='p-8'></div>
                                                     </td>
                                                     <td>
 
-                                                        <form>
+                                                        <form method="get" action="submit_faq.jsp">
                                                             <div class="space-y-12">
                                                                 <div class="border-b border-gray-900/10 pb-12">
                                                                     <h2 class="text-base font-semibold leading-7 text-gray-900">FAQ</h2>
@@ -174,7 +181,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        <input type="hidden" value="<%=usr_id%>" name="usr_id" id="usr_id">
                                                                         <div class="col-span-full">
                                                                             <label for="answer" class="block text-sm font-medium leading-6 text-gray-900">Respuesta</label>
                                                                             <div class="mt-2">
@@ -187,7 +194,7 @@
                                                             </div>
                                                             <div class="mt-6 flex items-center justify-end gap-x-6">
                                                                 <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancelar</button>
-                                                                <button type="submit" class="rounded-md bg-stone-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-stone-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-600">Guardar y Subir</button>
+                                                                <button type="submit" id="btnSubmit" name="btnSubmit" class="rounded-md bg-stone-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-stone-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-600">Guardar y Subir</button>
                                                             </div>
                                                         </form>
 

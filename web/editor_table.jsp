@@ -87,9 +87,9 @@
                                     ResultSet rs = null;
 
                                     statement = dbConnection.createStatement();
-                                    String SQLQuery = "SELECT usr_id,case_id,user_name,case_name,case_status,last_update_date FROM tbl_case_usr "
-                                            + " INNER JOIN tbl_users ON tbl_case_usr.usr_id = tbl_users.id"
-                                            + " INNER JOIN tbl_cases ON tbl_case_usr.case_id = tbl_cases.id WHERE case_status='Cerrado';";
+                                    String SQLQuery = "SELECT usr_id,case_id,user_name,case_name,case_status,case_last_update_date FROM tbl_case_admin "
+                                            + " INNER JOIN tbl_users ON tbl_case_admin.admin_id = tbl_users.id_user"
+                                            + " INNER JOIN tbl_cases ON tbl_case_admin.case_id = tbl_cases.id_case WHERE case_status='Cerrado';";
                                     rs = statement.executeQuery(SQLQuery);
 
                                     if (!rs.isBeforeFirst()) {
@@ -127,7 +127,7 @@
                                                             String username_report = rs.getString("user_name");
                                                             String report_name = rs.getString("case_name");
                                                             String status_report = rs.getString("case_status");
-                                                            String last_update_date = rs.getString("last_update_date");
+                                                            String last_update_date = rs.getString("case_last_update_date");
                                                     %>
                                                     <tr>
                                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%=id_user%></td>
@@ -136,7 +136,7 @@
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%=status_report%></td>
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%=last_update_date%></td>
                                                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                            <a href="editor_form.jsp?usr_id=<%=id_user%>&case_id=<%=id_case%>&report_name=<%=report_name%>&last_update_date=<%=last_update_date%>" class="text-indigo-600 hover:text-indigo-900">Redactar<span class="sr-only"></span></a>
+                                                            <a href="editor_form.jsp?usr_id=<%=id_user%>&case_id=<%=id_case%>&report_name=<%=report_name%>&last_update_date=<%=last_update_date%>&status_report=<%=status_report%>&username_report=<%=username_report%>" class="text-indigo-600 hover:text-indigo-900">Redactar<span class="sr-only"></span></a>
                                                         </td>
                                                     </tr>                
                                                     <%
