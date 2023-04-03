@@ -73,7 +73,7 @@
                         ResultSet rs = null;
 
                         statement = dbConnection.createStatement();
-                        String SQLQuery = "SELECT case_area,case_creation_date,case_desc from tbl_case_admin"
+                        String SQLQuery = "SELECT case_area,case_solution,case_creation_date,case_desc from tbl_case_admin"
                                 + " INNER JOIN tbl_users ON tbl_case_admin.admin_id = tbl_users.id_user"
                                 + " INNER JOIN tbl_cases ON tbl_case_admin.case_id = tbl_cases.id_case "
                                 + " WHERE admin_id=1 AND case_id=1;";
@@ -82,7 +82,7 @@
                             String case_area = rs.getString("case_area");
                             String case_creation_date = rs.getString("case_creation_date");
                             String case_desc = rs.getString("case_desc");
-
+                            String case_solution = rs.getString("case_solution");
 
                 %>
 
@@ -148,6 +148,9 @@
                                                                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                                         <dt class="text-sm font-medium text-gray-500">Descripción</dt>
                                                                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=case_desc%></dd>
+                                                                    </div><div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                                        <dt class="text-sm font-medium text-gray-500">Solución</dt>
+                                                                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%=case_solution%></dd>
                                                                     </div>
                                                                 </dl>
                                                             </div>
